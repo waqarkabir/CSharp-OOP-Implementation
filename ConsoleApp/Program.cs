@@ -10,8 +10,10 @@ namespace ConsoleApp
         {
             //BankAccountHandler bankAccountHandler = new BankAccountHandler(100);
 
-            BankAccountCollectionHandler bankAccountCollectionHandler = 
-                new BankAccountCollectionHandler();
+            IBankAccountHandler bankAccountHandler = new BankAccountCollectionHandler();
+            //IBankAccountHandler bankAccountHandler = new BankAccountHandler(100);
+
+
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Handlers
 {
-    public class BankAccountCollectionHandler
+    public class BankAccountCollectionHandler : IBankAccountHandler
     {
         private readonly ArrayList _bankAccounts;
         public BankAccountCollectionHandler()

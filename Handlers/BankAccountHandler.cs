@@ -2,7 +2,7 @@
 
 namespace Handlers
 {
-    public class BankAccountHandler
+    public class BankAccountHandler : IBankAccountHandler
     {
         private readonly BankAccount[] bankAccounts;
         private int index = 0;
