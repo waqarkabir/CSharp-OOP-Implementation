@@ -19,9 +19,9 @@ namespace Handlers
         }
 
         // Search
-        public BankAccount? GetBankAccount(string Code, bool ignoreCase = false)
+        public BankAccount GetBankAccount(string Code, bool ignoreCase = false)
         {
-            BankAccount? bankAccount = null;
+            BankAccount bankAccount = null;
 
             for (int i = 0; i < index; i++)
             {
