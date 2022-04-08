@@ -16,9 +16,6 @@ namespace Models
         }
 
 
-        // a.Transfer(b, 1000);
-
-
         public bool Transfer(BankAccount bankAccount, decimal amount)
         {
             //TODO:How many Bank account objects ???

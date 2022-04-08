@@ -13,7 +13,6 @@ namespace ConsoleApp
 
             IBankAccountHandler bankAccountHandler = new BankAccountCollectionHandler();
             //IBankAccountHandler bankAccountHandler = new BankAccountHandler(100);
-            int index = 0;
             bool choice = true;
             do
             {
@@ -21,9 +20,12 @@ namespace ConsoleApp
                 Console.WriteLine("1. Create new account");
                 Console.WriteLine("2. Search an existing account");
                 Console.WriteLine("3. Show all accounts");
+                Console.WriteLine("4. PayIn amount in account ");
+                Console.WriteLine("5. Withdraw amount from account");
+                Console.WriteLine("6. Transfer amount");
 
                 string option = Console.ReadLine();
-                string title, accountType, code;
+                string title, accountType, code, amount;
                 BankAccount bankAccount = null;
 
                 switch (option)
@@ -56,7 +58,6 @@ namespace ConsoleApp
                         if (bankAccount != null)
                         {
                             bankAccountHandler.Add(bankAccount);
-                            index += 1;
                             Console.WriteLine("Account created");
                             Console.WriteLine(bankAccount);
                         }
@@ -71,19 +72,20 @@ namespace ConsoleApp
                         code = Console.ReadLine().Trim();
 
                         Console.WriteLine($"Total accounts: {BankAccount.Total}");
-                        BankAccount temp = bankAccountHandler.GetBankAccount(Code: code, true);
-                        if (temp==null)
+                        bankAccount = bankAccountHandler.GetBankAccount(Code: code, true);
+                        if (bankAccount == null)
                         {
                             Console.WriteLine($"No data found for code: {code}");
                             Console.WriteLine("Press any key for main menu");
                             break;
                         }
-                        Console.WriteLine(temp.ToString());
+                        Console.WriteLine(bankAccount.ToString());
                         Console.WriteLine("Press any key for main menu");
                         Console.ReadKey();
                         #endregion
                         break;
                     case "3":
+                        #region Show all accounts
                         Console.Clear();
                         Console.WriteLine($"Total accounts: {BankAccount.Total}");
                          BankAccount[] bankAccounts = bankAccountHandler.GetBankAccounts();
@@ -93,17 +95,156 @@ namespace ConsoleApp
                         }
                         Console.WriteLine("Press any key for main menu");
                         Console.ReadKey();
+                        #endregion
                         break;
-                    //case "4":
-                    //    break;
-                    //case "5":
-                    //    break;
+                    case "4":
+                        #region PayIn amount in account
+                        Console.Clear();
+
+                        //Take account code to search
+                        Console.WriteLine("Enter the account code");
+                        code = Console.ReadLine().Trim();
+                        bankAccount = bankAccountHandler.GetBankAccount(Code: code, true);
+                        if (bankAccount == null)
+                        {
+                            Console.WriteLine($"No data found for code: {code}");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+
+                        //Take payin amount
+                        Console.WriteLine("Enter the amount to payin");
+                        amount = Console.ReadLine().Trim();
+                        if (amount== null)
+                        {
+                            Console.WriteLine($"Please enter valid amount");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+                        bankAccount.PayIn(amount: decimal.Parse(amount));
+                        Console.WriteLine($"Amount of {amount} is payed-in your Bank Account: {code}");
+                        Console.WriteLine($"Your current balance is: {bankAccount.Balance}");
+                        Console.WriteLine("Press any key for main menu");
+                        Console.ReadKey();
+
+                        #endregion
+                        break;
+                    case "5":
+                        #region Withdraw amount from account
+                        Console.Clear();
+
+                        //Take account code to search
+                        Console.WriteLine("Enter the account code");
+                        code = Console.ReadLine().Trim();
+                        bankAccount = bankAccountHandler.GetBankAccount(Code: code, true);
+                        if (bankAccount == null)
+                        {
+                            Console.WriteLine($"No data found for code: {code}");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+
+                        //Take payin amount
+                        Console.WriteLine("Enter the amount to withdraw");
+                        amount = Console.ReadLine().Trim();
+                        if (amount == null)
+                        {
+                            Console.WriteLine($"Please enter valid amount");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+                        bankAccount.WithDraw(amount: decimal.Parse(amount));
+                        Console.WriteLine($"Amount of {amount} is withdraw from your Bank Account: {code}");
+                        Console.WriteLine($"Your current balance is: {bankAccount.Balance}");
+                        Console.WriteLine("Press any key for main menu");
+                        Console.ReadKey();
+
+                        #endregion
+                        break;
+                    case "6":
+                        #region Transfer amount
+                        Console.Clear();
+
+                        //Take sender account code to search
+                        Console.WriteLine("Enter the Sender account code");
+                        code = Console.ReadLine().Trim();
+                        var senderBankAccountCode = bankAccountHandler.GetBankAccount(Code: code, true);
+                        if (senderBankAccountCode == null)
+                        {
+                            Console.WriteLine($"No data found for code: {code}");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+
+                        //Take receiver account code to search
+                        Console.WriteLine("Enter the Receiver account code");
+                        code = Console.ReadLine().Trim();
+                        var receiverBankAccountCode = bankAccountHandler.GetBankAccount(Code: code, true);
+                        if (receiverBankAccountCode == null)
+                        {
+                            Console.WriteLine($"No data found for code: {code}");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+
+                        //Take transfer amount
+                        Console.WriteLine("Enter the amount to transfer");
+                        amount = Console.ReadLine().Trim();
+                        if (amount == null)
+                        {
+                            Console.WriteLine($"Please enter valid amount");
+                            Console.WriteLine("Press any key for main menu");
+                            break;
+                        }
+                        var transferAccountType = senderBankAccountCode.AccountType;
+                        bool transferStatus = false;
+                        if (transferAccountType == AccountType.Saving)
+                        {
+                            SavingBankAccount senderBankAccount = new SavingBankAccount();
+                            var tranferStatus = senderBankAccount.Transfer(receiverBankAccountCode, decimal.Parse(amount));
+                            if (tranferStatus == false)
+                            {
+                                Console.WriteLine($"Amount cannot be transferred.");
+                                Console.WriteLine("Press any key for main menu");
+                                Console.ReadKey();
+                                break;
+                            }
+                            TransferAmountMessage(amount, senderBankAccountCode, receiverBankAccountCode);
+                            break;
+                        }
+                        else if (transferAccountType == AccountType.Current)
+                        {
+                            CurrentBankAccount senderBankAccount = new CurrentBankAccount();
+                            var tranferStatus = senderBankAccount.Transfer(receiverBankAccountCode, decimal.Parse(amount));
+                            if (tranferStatus == false)
+                            {
+                                Console.WriteLine($"Amount cannot be transferred.");
+                                Console.WriteLine("Press any key for main menu");
+                                Console.ReadKey();
+                                break;
+                            }
+                                TransferAmountMessage(amount, senderBankAccountCode, receiverBankAccountCode);
+                            break;
+                        }
+
+                        #endregion
+                        break;
                     default:
                         choice = false;
                         break;
                 }
 
             } while (choice);
+        }
+
+        private static void TransferAmountMessage(string amount, 
+            BankAccount? senderBankAccountCode,
+            BankAccount? receiverBankAccountCode)
+        {
+            Console.WriteLine($"Amount of {amount} is transfered from Bank Account: {senderBankAccountCode} to {receiverBankAccountCode}");
+            Console.WriteLine($"Your current balance is: {senderBankAccountCode.Balance}");
+            Console.WriteLine("Press any key for main menu");
+            Console.ReadKey();
         }
     }
 }

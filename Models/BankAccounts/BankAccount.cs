@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿ namespace Models
 {
     public abstract class BankAccount
     {
@@ -18,6 +18,7 @@
         {
             AccountType = accountType;
             this.openingBalance = openingBalance;
+            Balance = openingBalance;
         }
 
         private decimal openingBalance;
