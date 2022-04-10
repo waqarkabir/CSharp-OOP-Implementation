@@ -40,6 +40,5 @@ namespace Handlers
         {
             return bankAccounts;
         }
-
     }
 }

@@ -12,7 +12,6 @@ namespace ConsoleApp
             //BankAccountHandler bankAccountHandler = new BankAccountHandler(100);
 
             IBankAccountHandler bankAccountHandler = new BankAccountCollectionHandler();
-            //IBankAccountHandler bankAccountHandler = new BankAccountHandler(100);
             bool choice = true;
             do
             {
@@ -211,19 +210,16 @@ namespace ConsoleApp
                         }
                         var senderAccountType = senderBankAccount.AccountType;
                         bool transferStatus = false;
-                        //AccountTransaction accountTransaction = new AccountTransaction(); ;
                         if (senderAccountType == AccountType.Saving)
                         {
                             SavingBankAccount savingSenderBankAccount = senderBankAccount as SavingBankAccount;
                             var tranferStatus = savingSenderBankAccount.Transfer(receiverBankAccount, decimal.Parse(amount));
                             if (tranferStatus == false)
                             {
-                                Console.WriteLine($"Amount cannot be transferred.");
-                                Console.WriteLine("Press any key for main menu");
-                                Console.ReadKey();
+                                AccountTransaction.TransferFailureMessage();
                                 break;
                             }
-                            AccountTransaction.TransferAmountMessage(senderBankAccount, receiverBankAccount, decimal.Parse(amount));
+                            AccountTransaction.TransferSuccessMessage(senderBankAccount, receiverBankAccount, decimal.Parse(amount));
                             break;
                         }
                         else if (senderAccountType == AccountType.Current)
@@ -232,12 +228,10 @@ namespace ConsoleApp
                             var tranferStatus = currentSenderBankAccount.Transfer(receiverBankAccount, decimal.Parse(amount));
                             if (tranferStatus == false)
                             {
-                                Console.WriteLine($"Amount cannot be transferred.");
-                                Console.WriteLine("Press any key for main menu");
-                                Console.ReadKey();
+                                AccountTransaction.TransferFailureMessage();
                                 break;
                             }
-                            AccountTransaction.TransferAmountMessage(senderBankAccount, receiverBankAccount, decimal.Parse(amount));
+                            AccountTransaction.TransferSuccessMessage(senderBankAccount, receiverBankAccount, decimal.Parse(amount));
                             break;
                         }
                         #endregion
@@ -246,10 +240,7 @@ namespace ConsoleApp
                         choice = false;
                         break;
                 }
-
             } while (choice);
         }
-
-
     }
 }
