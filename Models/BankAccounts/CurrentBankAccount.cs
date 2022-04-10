@@ -27,12 +27,12 @@ namespace Models
         public bool Transfer(BankAccount bankAccount, decimal amount)
         {
             //TODO:How many Bank account objects ???
-            CurrentBankAccount? temp = bankAccount as CurrentBankAccount;
+            //CurrentBankAccount? temp = bankAccount as CurrentBankAccount;
 
-            if (temp == null)
-            {
-                return false;
-            }
+            //if (temp == null)
+            //{
+            //    return false;
+            //}
 
             if (!WithDraw(amount))
             {

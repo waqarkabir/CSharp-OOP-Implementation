@@ -19,12 +19,12 @@ namespace Models
         public bool Transfer(BankAccount bankAccount, decimal amount)
         {
             //TODO:How many Bank account objects ???
-            SavingBankAccount? temp = bankAccount as SavingBankAccount;
+            //SavingBankAccount? temp = bankAccount as SavingBankAccount;
 
-            if (temp == null)
-            {
-                return false;
-            }
+            //if (temp == null)
+            //{
+            //    return false;
+            //}
 
             if (!WithDraw(amount))
             {
